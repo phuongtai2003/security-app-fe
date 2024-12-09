@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_8dp">8dp</dimen>
+    <dimen name="margin_12dp">12dp</dimen>
+    <dimen name="margin_16dp">16dp</dimen>
+    <dimen name="margin_24dp">24dp</dimen>
+    <dimen name="margin_32dp">32dp</dimen>
+    <dimen name="margin_40dp">40dp</dimen>
+    <dimen name="margin_48dp">48dp</dimen>
+    <dimen name="margin_56dp">56dp</dimen>
+    <dimen name="margin_64dp">64dp</dimen>
+    <dimen name="margin_72dp">72dp</dimen>
+    <dimen name="margin_80dp">80dp</dimen>
+    <dimen name="margin_88dp">88dp</dimen>
+    <dimen name="margin_96dp">96dp</dimen>
+    <dimen name="font_12sp">12sp</dimen>
+    <dimen name="font_14sp">14sp</dimen>
+    <dimen name="font_16sp">16sp</dimen>
+    <dimen name="font_18sp">18sp</dimen>
+    <dimen name="font_20sp">20sp</dimen>
+    <dimen name="font_22sp">22sp</dimen>
+    <dimen name="font_24sp">24sp</dimen>
+    <dimen name="font_26sp">26sp</dimen>
+    <dimen name="font_28sp">28sp</dimen>
+    <dimen name="font_30sp">30sp</dimen>
+    <dimen name="font_32sp">32sp</dimen>
+    <dimen name="radius_8dp">8dp</dimen>
+    <dimen name="radius_16dp">16dp</dimen>
+    <dimen name="radius_24dp">24dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+</resources>
