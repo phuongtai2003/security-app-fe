@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.security.securityapplication.data.DataRepository
 import com.security.securityapplication.data.Resource
 import com.security.securityapplication.data.dto.profile.UserModel
+import com.security.securityapplication.data.dto.rates.ExchangeRates
 import com.security.securityapplication.pages.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -21,6 +22,10 @@ class HomeVM @Inject constructor(private val dataRepository: DataRepository) : B
     private val privateLogoutLiveData = MutableLiveData<Resource<Boolean>>()
     val logoutLiveData: MutableLiveData<Resource<Boolean>> get() = privateLogoutLiveData
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    private val privateExchangeRatesLiveData = MutableLiveData<Resource<ExchangeRates>>()
+    val exchangeRatesLiveData: MutableLiveData<Resource<ExchangeRates>> get() = privateExchangeRatesLiveData
+
     init {
         getProfile()
     }
@@ -30,6 +35,9 @@ class HomeVM @Inject constructor(private val dataRepository: DataRepository) : B
         viewModelScope.launch {
             dataRepository.getProfile().collect {
                 privateHomeLiveData.value = it
+            }
+            dataRepository.getExchangeRates().collect {
+                privateExchangeRatesLiveData.value = it
             }
         }
     }

@@ -4,6 +4,7 @@ import android.util.Log
 import com.security.securityapplication.data.dto.login.LoginRequest
 import com.security.securityapplication.data.dto.login.LoginResponse
 import com.security.securityapplication.data.dto.profile.UserModel
+import com.security.securityapplication.data.dto.rates.ExchangeRates
 import com.security.securityapplication.data.error.DEFAULT_ERROR
 import com.security.securityapplication.data.local.LocalData
 import com.security.securityapplication.data.remote.RemoteData
@@ -25,7 +26,6 @@ class DataRepository @Inject constructor(
                     localDataSource.saveToken(it.data.token)
                     localDataSource.saveRefreshToken(it.data.refreshToken)
                 }
-                Log.d("DataRepository", "login: $it")
                 emit(it)
             }
         }.flowOn(ioDispatcher)
@@ -34,8 +34,13 @@ class DataRepository @Inject constructor(
     override suspend fun getProfile(): Flow<Resource<UserModel>> {
         return flow {
             remoteDataSource.getProfile().let {
-                Log.d("DataRepository", "getProfile: $it")
-                emit(it)
+                if(it.data != null) {
+                    emit(it)
+                }
+                else{
+                    localDataSource.logout()
+                    emit(Resource.Error<UserModel>(null, DEFAULT_ERROR))
+                }
             }
         }.flowOn(ioDispatcher)
     }
@@ -49,6 +54,14 @@ class DataRepository @Inject constructor(
             catch (e: Exception){
                 emit(Resource.Error(false, DEFAULT_ERROR))
             }
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun getExchangeRates(): Flow<Resource<ExchangeRates>> {
+        return flow {
+            val exchangeRateData = remoteDataSource.getExchangeRates()
+            Log.d("DataRepository", "getExchangeRates: $exchangeRateData")
+            emit(exchangeRateData)
         }.flowOn(ioDispatcher)
     }
 }

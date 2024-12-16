@@ -10,19 +10,19 @@ class LocalData @Inject constructor(private val sharedPreferences: SharedPrefere
         sharedPreferences.edit().putString(TOKEN_KEY, token).apply()
     }
 
-    fun saveRefreshToken(refreshToken: String) {
+     fun saveRefreshToken(refreshToken: String) {
         sharedPreferences.edit().putString(REFRESH_TOKEN_KEY, refreshToken).apply()
     }
 
-    fun getToken(): String? {
+     fun getToken(): String? {
         return sharedPreferences.getString(TOKEN_KEY, null)
     }
 
-    fun getRefreshToken(): String? {
+     fun getRefreshToken(): String? {
         return sharedPreferences.getString(REFRESH_TOKEN_KEY, null)
     }
 
-    fun logout() {
+     fun logout() {
         sharedPreferences.edit().clear().apply()
     }
 }

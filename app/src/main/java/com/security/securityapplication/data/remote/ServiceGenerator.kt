@@ -1,6 +1,7 @@
 package com.security.securityapplication.data.remote
 
 import android.content.SharedPreferences
+import android.util.Log
 import com.google.gson.Gson
 import com.security.securityapplication.BASE_URL
 import com.security.securityapplication.data.local.LocalData
@@ -14,10 +15,10 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private const val timeoutRead = 30
+private const val timeoutRead = 10
 private const val contentType = "Content-Type"
 private const val contentTypeValue = "application/json"
-private const val timeoutConnect = 30
+private const val timeoutConnect = 10
 private const val authorizationHeader = "Authorization"
 private const val bearer = "Bearer "
 
@@ -30,9 +31,13 @@ class ServiceGenerator @Inject constructor(
 
     private var tokenInterceptor = Interceptor { chain ->
         val original = chain.request()
-        val request = original.newBuilder()
+        val requestBuilder = original.newBuilder()
             .header(contentType, contentTypeValue)
-            .header(authorizationHeader, bearer + localData.getToken())
+        val token = localData.getToken()
+        if (token != null) {
+            requestBuilder.header(authorizationHeader, bearer + token)
+        }
+        val request = requestBuilder
             .method(original.method, original.body)
             .build()
         chain.proceed(request)

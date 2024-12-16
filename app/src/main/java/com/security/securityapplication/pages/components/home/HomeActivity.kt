@@ -2,6 +2,7 @@ package com.security.securityapplication.pages.components.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.security.securityapplication.R
 import com.security.securityapplication.data.Resource
 import com.security.securityapplication.data.dto.profile.UserModel
+import com.security.securityapplication.data.dto.rates.ExchangeRates
 import com.security.securityapplication.databinding.ActivityHomeBinding
 import com.security.securityapplication.pages.base.BaseActivity
 import com.security.securityapplication.pages.components.login.LoginActivity
@@ -25,6 +27,7 @@ class HomeActivity : BaseActivity() {
     override fun observeViewModel() {
         observe(homeViewModel.homeLiveData, ::handleHomeResult)
         observe(homeViewModel.logoutLiveData, ::handleLogoutResult)
+        observe(homeViewModel.exchangeRatesLiveData, ::handleExchangeRatesResult)
     }
 
     override fun initViewBinding() {
@@ -44,6 +47,21 @@ class HomeActivity : BaseActivity() {
                 binding.loaderView.toGone()
                 binding.username.text = it.email
                 binding.name.text = it.name ?: "No Name"
+            }
+            is Resource.Error -> {
+                binding.loaderView.toGone()
+            }
+        }
+    }
+
+    private fun handleExchangeRatesResult(status: Resource<ExchangeRates>) {
+        when (status) {
+            is Resource.Loading -> binding.loaderView.toVisible()
+            is Resource.Success -> {
+                val ratesData = status.data?.rates
+                binding.vietnameseExchangeRate.text = "${String.format("%.2f", ratesData?.vnd)} : 1 Euro"
+                binding.usdExchangeRate.text = "${String.format("%.2f", ratesData?.usd)} : 1 Euro"
+                binding.loaderView.toGone()
             }
             is Resource.Error -> {
                 binding.loaderView.toGone()

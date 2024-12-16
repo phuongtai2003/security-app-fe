@@ -5,9 +5,11 @@ import com.security.securityapplication.data.Resource
 import com.security.securityapplication.data.dto.login.LoginRequest
 import com.security.securityapplication.data.dto.login.LoginResponse
 import com.security.securityapplication.data.dto.profile.UserModel
+import com.security.securityapplication.data.dto.rates.ExchangeRates
 import com.security.securityapplication.data.error.NETWORK_ERROR
 import com.security.securityapplication.data.error.NO_INTERNET_CONNECTION
 import com.security.securityapplication.data.remote.service.AuthenticationService
+import com.security.securityapplication.data.remote.service.ExchangeRatesService
 import com.security.securityapplication.data.remote.service.ProfileService
 import com.security.securityapplication.utils.NetworkConnectivity
 import retrofit2.Response
@@ -31,6 +33,15 @@ class RemoteData @Inject constructor(
         val profileService = serviceGenerator.createAuthService(ProfileService::class.java)
         return when (val response = processCall { profileService.getProfile() }) {
             is UserModel -> Resource.Success(response)
+            is Int -> Resource.Error(errorCode = response)
+            else -> Resource.Error(errorCode = NETWORK_ERROR)
+        }
+    }
+
+    override suspend fun getExchangeRates(): Resource<ExchangeRates> {
+        val exchangeRateService = serviceGenerator.createAuthService(ExchangeRatesService::class.java)
+        return when (val response = processCall { exchangeRateService.getExchangeRates() }) {
+            is ExchangeRates -> Resource.Success(response)
             is Int -> Resource.Error(errorCode = response)
             else -> Resource.Error(errorCode = NETWORK_ERROR)
         }
